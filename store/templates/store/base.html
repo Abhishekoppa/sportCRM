@@ -1,0 +1,1155 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{% block title %}Sports Vit - Cloud Computing{% endblock %}</title>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'store/css/style.css' %}">
+
+<style>
+/* =========================================================
+   SPORTS VIT — ELECTRIC BLUE + BLACK SPORTS NAVBAR
+   Existing Django functionality and features unchanged.
+   ========================================================= */
+
+:root {
+    --sport-black: #030507;
+    --sport-dark: #070b11;
+    --sport-blue: #00aaff;
+    --sport-blue-bright: #25c5ff;
+    --sport-blue-dark: #0066ff;
+    --sport-blue-soft: #008cff;
+    --sport-gray: #111821;
+    --sport-white: #ffffff;
+}
+
+/* =========================
+   NAVBAR
+   ========================= */
+
+.sports-navbar {
+    background:
+        linear-gradient(
+            115deg,
+            #020304 0%,
+            #05080d 42%,
+            #07111c 72%,
+            #030609 100%
+        ) !important;
+
+    min-height: 78px;
+
+    border-bottom: 1px solid rgba(0,170,255,.35);
+
+    box-shadow:
+        0 5px 30px rgba(0,0,0,.75),
+        0 0 30px rgba(0,140,255,.08);
+
+    position: relative;
+    overflow: hidden;
+    z-index: 1000;
+}
+
+/* Diagonal sports pattern */
+
+.sports-navbar::before {
+    content: "";
+
+    position: absolute;
+    inset: 0;
+
+    pointer-events: none;
+
+    opacity: .13;
+
+    background:
+        repeating-linear-gradient(
+            125deg,
+            transparent 0,
+            transparent 45px,
+            rgba(0,170,255,.20) 46px,
+            rgba(0,170,255,.20) 48px,
+            transparent 49px,
+            transparent 95px
+        );
+}
+
+/* Animated blue light */
+
+.sports-navbar::after {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -10%;
+
+    width: 120%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            var(--sport-blue),
+            #ffffff,
+            var(--sport-blue),
+            transparent
+        );
+
+    box-shadow:
+        0 0 8px var(--sport-blue),
+        0 0 18px rgba(0,170,255,.8);
+
+    animation: blueSlide 5s linear infinite;
+}
+
+@keyframes blueSlide {
+
+    0% {
+        transform: translateX(-15%);
+        opacity: .35;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(15%);
+        opacity: .35;
+    }
+}
+
+.sports-navbar .container {
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================
+   BRAND
+   ========================= */
+
+.sports-brand {
+
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    gap: 11px;
+
+    color: #ffffff !important;
+
+    font-size: 1.05rem;
+
+    font-weight: 900;
+
+    letter-spacing: -.4px;
+
+    text-transform: uppercase;
+
+    padding: 8px 15px 8px 0 !important;
+
+    transition: .3s ease;
+}
+
+/* Sports arrow */
+
+.sports-brand::before {
+
+    content: "➤";
+
+    color: var(--sport-blue);
+
+    font-size: 20px;
+
+    text-shadow:
+        0 0 5px var(--sport-blue),
+        0 0 15px rgba(0,170,255,.9);
+
+    transform: skewX(-12deg);
+
+    transition: .3s ease;
+}
+
+.sports-brand::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 30px;
+    bottom: 3px;
+
+    width: 0;
+    height: 2px;
+
+    background: var(--sport-blue);
+
+    box-shadow:
+        0 0 8px var(--sport-blue),
+        0 0 15px rgba(0,170,255,.6);
+
+    transition: width .3s ease;
+}
+
+.sports-brand:hover {
+
+    color: var(--sport-blue-bright) !important;
+
+    transform: translateX(3px);
+}
+
+.sports-brand:hover::before {
+
+    transform:
+        translateX(5px)
+        skewX(-12deg)
+        scale(1.2);
+}
+
+.sports-brand:hover::after {
+
+    width: calc(100% - 30px);
+}
+
+/* =========================
+   NAV LINKS
+   ========================= */
+
+.sports-navbar .nav-link {
+
+    position: relative;
+
+    color: rgba(255,255,255,.78) !important;
+
+    font-weight: 700;
+
+    font-size: .88rem;
+
+    letter-spacing: .7px;
+
+    text-transform: uppercase;
+
+    margin: 0 3px;
+
+    padding: 11px 13px !important;
+
+    border-radius: 8px;
+
+    transition:
+        color .25s ease,
+        background .25s ease,
+        transform .25s ease;
+}
+
+/* Small sports arrow */
+
+.sports-navbar .nav-link::before {
+
+    content: "↗";
+
+    color: var(--sport-blue);
+
+    font-size: 11px;
+
+    font-weight: 900;
+
+    position: absolute;
+
+    left: 3px;
+    top: 7px;
+
+    opacity: 0;
+
+    transform:
+        translateX(-6px)
+        translateY(4px);
+
+    transition: .25s ease;
+}
+
+/* Underline */
+
+.sports-navbar .nav-link::after {
+
+    content: "";
+
+    position: absolute;
+
+    bottom: 4px;
+    left: 13px;
+
+    width: 0;
+    height: 2px;
+
+    background: var(--sport-blue);
+
+    box-shadow:
+        0 0 6px var(--sport-blue),
+        0 0 12px rgba(0,170,255,.7);
+
+    transition: width .25s ease;
+}
+
+/* Hover */
+
+.sports-navbar .nav-link:hover,
+.sports-navbar .nav-link:focus {
+
+    color: var(--sport-blue-bright) !important;
+
+    background:
+        rgba(0,170,255,.08);
+
+    transform:
+        translateY(-2px);
+}
+
+.sports-navbar .nav-link:hover::before {
+
+    opacity: 1;
+
+    transform:
+        translateX(0)
+        translateY(0);
+}
+
+.sports-navbar .nav-link:hover::after {
+
+    width: calc(100% - 26px);
+}
+
+/* Active */
+
+.sports-navbar .nav-item .nav-link.active {
+
+    color: var(--sport-blue-bright) !important;
+
+    background:
+        rgba(0,170,255,.10);
+
+    box-shadow:
+        inset 0 -2px 0 var(--sport-blue);
+}
+
+/* =========================
+   SEARCH
+   ========================= */
+
+.sports-search {
+
+    position: relative;
+}
+
+.sports-search input {
+
+    width: 190px;
+
+    color: white !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #0a0e13,
+            #101721
+        ) !important;
+
+    border:
+        1px solid rgba(0,170,255,.35) !important;
+
+    border-radius: 30px !important;
+
+    padding:
+        9px 40px 9px 18px !important;
+
+    font-size: .85rem;
+
+    font-weight: 600;
+
+    box-shadow:
+        inset 0 0 12px rgba(0,0,0,.7);
+
+    transition: all .3s ease;
+}
+
+.sports-search input::placeholder {
+
+    color:
+        rgba(255,255,255,.42);
+}
+
+.sports-search input:focus {
+
+    width: 235px;
+
+    border-color:
+        var(--sport-blue) !important;
+
+    box-shadow:
+
+        0 0 0 3px
+        rgba(0,170,255,.08),
+
+        0 0 20px
+        rgba(0,170,255,.22),
+
+        inset 0 0 12px
+        rgba(0,0,0,.7);
+
+    outline: none;
+}
+
+/* Search icon */
+
+.sports-search::after {
+
+    content: "⌕";
+
+    position: absolute;
+
+    right: 13px;
+    top: 6px;
+
+    color:
+        var(--sport-blue);
+
+    font-size: 20px;
+
+    pointer-events: none;
+
+    text-shadow:
+        0 0 8px
+        rgba(0,170,255,.8);
+}
+
+/* =========================
+   WISHLIST + CART
+   ========================= */
+
+.sports-icon-link {
+
+    width: 40px;
+    height: 40px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white !important;
+
+    border:
+        1px solid
+        rgba(0,170,255,.22);
+
+    background:
+        rgba(255,255,255,.025);
+
+    border-radius: 10px;
+
+    text-decoration: none;
+
+    transition: .25s ease;
+}
+
+.sports-icon-link:hover {
+
+    color:
+        var(--sport-blue-bright) !important;
+
+    background:
+        rgba(0,170,255,.10);
+
+    border-color:
+        rgba(0,170,255,.75);
+
+    transform:
+        translateY(-3px)
+        rotate(-2deg);
+
+    box-shadow:
+
+        0 5px 20px
+        rgba(0,0,0,.5),
+
+        0 0 15px
+        rgba(0,170,255,.20);
+}
+
+.sports-icon-link i {
+
+    font-size: 18px;
+
+    transition: .25s ease;
+}
+
+.sports-icon-link:hover i {
+
+    transform:
+        scale(1.15);
+}
+
+/* =========================
+   CART BADGE
+   ========================= */
+
+.sports-cart-badge {
+
+    background:
+        var(--sport-blue) !important;
+
+    color:
+        #020507 !important;
+
+    font-size:
+        10px !important;
+
+    font-weight:
+        900;
+
+    min-width:
+        18px;
+
+    height:
+        18px;
+
+    display:
+        inline-flex;
+
+    align-items:
+        center;
+
+    justify-content:
+        center;
+
+    border-radius:
+        50%;
+
+    margin-left:
+        4px;
+
+    box-shadow:
+
+        0 0 8px
+        rgba(0,170,255,.9),
+
+        0 0 15px
+        rgba(0,170,255,.4);
+}
+
+/* =========================
+   LOGIN BUTTON
+   ========================= */
+
+.sports-login-btn {
+
+    position: relative;
+
+    color:
+        #020507 !important;
+
+    background:
+        var(--sport-blue) !important;
+
+    border:
+        none !important;
+
+    border-radius:
+        8px !important;
+
+    font-weight:
+        900 !important;
+
+    font-size:
+        .75rem !important;
+
+    letter-spacing:
+        .8px;
+
+    text-transform:
+        uppercase;
+
+    padding:
+        10px 17px !important;
+
+    overflow:
+        hidden;
+
+    box-shadow:
+
+        0 0 12px
+        rgba(0,170,255,.35),
+
+        0 0 25px
+        rgba(0,170,255,.08);
+
+    transition:
+        .3s ease;
+}
+
+.sports-login-btn::after {
+
+    content:
+        "→";
+
+    margin-left:
+        7px;
+
+    font-size:
+        15px;
+
+    font-weight:
+        900;
+
+    transition:
+        .25s ease;
+}
+
+.sports-login-btn:hover {
+
+    background:
+        var(--sport-blue-bright) !important;
+
+    transform:
+        translateY(-2px);
+
+    box-shadow:
+
+        0 0 10px
+        rgba(0,170,255,.9),
+
+        0 0 30px
+        rgba(0,170,255,.35);
+}
+
+.sports-login-btn:hover::after {
+
+    margin-left:
+        12px;
+}
+
+/* =========================
+   LOGOUT
+   ========================= */
+
+.sports-logout-btn {
+
+    color:
+        white !important;
+
+    background:
+        transparent !important;
+
+    border:
+        1px solid
+        rgba(255,255,255,.25) !important;
+
+    border-radius:
+        8px !important;
+
+    font-weight:
+        800 !important;
+
+    font-size:
+        .72rem !important;
+
+    letter-spacing:
+        .7px;
+
+    text-transform:
+        uppercase;
+
+    padding:
+        9px 14px !important;
+
+    transition:
+        .25s ease;
+}
+
+.sports-logout-btn:hover {
+
+    color:
+        #020507 !important;
+
+    background:
+        var(--sport-blue) !important;
+
+    border-color:
+        var(--sport-blue) !important;
+
+    box-shadow:
+
+        0 0 15px
+        rgba(0,170,255,.55);
+}
+
+/* =========================
+   ADMIN
+   ========================= */
+
+.sports-admin {
+
+    color:
+        var(--sport-blue-bright) !important;
+}
+
+/* =========================
+   MOBILE TOGGLER
+   ========================= */
+
+.sports-toggler {
+
+    color:
+        var(--sport-blue) !important;
+
+    border:
+        1px solid
+        rgba(0,170,255,.45) !important;
+
+    border-radius:
+        8px;
+
+    padding:
+        6px 11px;
+
+    background:
+        rgba(0,170,255,.05);
+
+    box-shadow:
+        0 0 10px
+        rgba(0,170,255,.10);
+}
+
+.sports-toggler:hover {
+
+    background:
+        rgba(0,170,255,.12);
+
+    box-shadow:
+        0 0 18px
+        rgba(0,170,255,.25);
+}
+
+/* =========================
+   SPORTS SPEED LINES
+   ========================= */
+
+.sport-speed-lines {
+
+    position:
+        absolute;
+
+    right:
+        -20px;
+
+    bottom:
+        -10px;
+
+    width:
+        140px;
+
+    height:
+        60px;
+
+    opacity:
+        .20;
+
+    transform:
+        skewX(-25deg);
+
+    background:
+
+        linear-gradient(
+            90deg,
+            transparent 0%,
+            transparent 15%,
+
+            var(--sport-blue) 16%,
+            var(--sport-blue) 18%,
+
+            transparent 19%,
+            transparent 35%,
+
+            var(--sport-blue) 36%,
+            var(--sport-blue) 38%,
+
+            transparent 39%,
+            transparent 55%,
+
+            var(--sport-blue) 56%,
+            var(--sport-blue) 58%,
+
+            transparent 59%
+        );
+}
+
+/* =========================
+   NAVBAR GLOW DOT
+   ========================= */
+
+.sports-navbar .container::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: 2px;
+    top: 50%;
+
+    width: 5px;
+    height: 5px;
+
+    background:
+        var(--sport-blue);
+
+    border-radius:
+        50%;
+
+    box-shadow:
+
+        0 0 7px
+        var(--sport-blue),
+
+        0 0 18px
+        var(--sport-blue),
+
+        0 0 35px
+        rgba(0,170,255,.7);
+
+    animation:
+        pulseBlue 2s ease-in-out infinite;
+}
+
+@keyframes pulseBlue {
+
+    0%,
+    100% {
+        opacity: .4;
+        transform: scale(.8);
+    }
+
+    50% {
+        opacity: 1;
+        transform: scale(1.3);
+    }
+}
+
+/* =========================
+   MOBILE
+   ========================= */
+
+@media (max-width: 991px) {
+
+    .sports-navbar {
+
+        min-height:
+            68px;
+    }
+
+    .sports-navbar .navbar-collapse {
+
+        margin-top:
+            12px;
+
+        padding:
+            14px;
+
+        background:
+
+            linear-gradient(
+                135deg,
+                #05080c,
+                #0a1119
+            );
+
+        border:
+            1px solid
+            rgba(0,170,255,.25);
+
+        border-radius:
+            14px;
+
+        box-shadow:
+
+            0 15px 35px
+            rgba(0,0,0,.65),
+
+            0 0 25px
+            rgba(0,170,255,.08);
+    }
+
+    .sports-navbar .nav-link {
+
+        margin:
+            3px 0;
+    }
+
+    .sports-search input {
+
+        width:
+            100%;
+    }
+
+    .sports-search input:focus {
+
+        width:
+            100%;
+    }
+
+    .sports-search {
+
+        margin-top:
+            12px;
+
+        margin-bottom:
+            10px;
+    }
+
+    .sports-brand {
+
+        font-size:
+            .88rem;
+    }
+
+    .sports-navbar .container::after {
+
+        display:
+            none;
+    }
+}
+
+/* =========================
+   SMALL PHONES
+   ========================= */
+
+@media (max-width: 450px) {
+
+    .sports-brand {
+
+        font-size:
+            .75rem;
+
+        max-width:
+            250px;
+    }
+
+    .sports-brand::before {
+
+        font-size:
+            16px;
+    }
+}
+
+/* =========================
+   NAVBAR ENTRANCE
+   ========================= */
+
+@keyframes navbarEnter {
+
+    from {
+
+        opacity:
+            0;
+
+        transform:
+            translateY(-12px);
+    }
+
+    to {
+
+        opacity:
+            1;
+
+        transform:
+            translateY(0);
+    }
+}
+
+.sports-navbar {
+
+    animation:
+        navbarEnter .6s ease-out;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-dark sticky-top sports-navbar">
+
+    <div class="sport-speed-lines"></div>
+
+    <div class="container">
+
+        <!-- EXISTING BRAND -->
+        <a class="navbar-brand fw-bold sports-brand"
+           href="{% url 'home' %}">
+            Sports Vit - Cloud Computing
+        </a>
+
+        <!-- EXISTING MOBILE BUTTON -->
+        <button class="navbar-toggler sports-toggler"
+                data-bs-toggle="collapse"
+                data-bs-target="#nav">
+            ☰
+        </button>
+
+        <div id="nav" class="collapse navbar-collapse">
+
+            <!-- EXISTING NAVIGATION -->
+            <ul class="navbar-nav me-auto">
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'products' %}">
+                        Shop
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'dashboard' %}">
+                        Dashboard
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'support' %}">
+                        Support
+                    </a>
+                </li>
+
+                {% if user.is_staff %}
+                <li class="nav-item">
+                    <a class="nav-link sports-admin"
+                       href="{% url 'admin_dashboard' %}">
+                        Admin
+                    </a>
+                </li>
+                {% endif %}
+
+            </ul>
+
+            <!-- EXISTING SEARCH -->
+            <form class="d-flex me-3 sports-search"
+                  action="{% url 'products' %}">
+
+                <input class="form-control"
+                       name="q"
+                       placeholder="Search gear...">
+
+            </form>
+
+            <!-- EXISTING WISHLIST -->
+            <a class="sports-icon-link me-2"
+               href="{% url 'wishlist' %}"
+               title="Wishlist">
+
+                <i class="bi bi-heart"></i>
+
+            </a>
+
+            <!-- EXISTING CART -->
+            <a class="sports-icon-link"
+               href="{% url 'cart' %}"
+               title="Shopping Cart">
+
+                <i class="bi bi-cart"></i>
+
+                <span class="badge sports-cart-badge">
+                    {{cart_count}}
+                </span>
+
+            </a>
+
+            <!-- EXISTING AUTH LOGIC -->
+            {% if user.is_authenticated %}
+
+            <form action="{% url 'logout' %}"
+                  method="post"
+                  class="ms-3">
+
+                {% csrf_token %}
+
+                <button class="btn btn-sm sports-logout-btn">
+                    Logout
+                </button>
+
+            </form>
+
+            {% else %}
+
+            <a class="btn btn-sm sports-login-btn ms-3"
+               href="{% url 'login' %}">
+                Login
+            </a>
+
+            {% endif %}
+
+        </div>
+    </div>
+</nav>
+
+<main>
+
+{% block content %}
+{% endblock %}
+
+</main>
+
+<footer class="mt-5 bg-dark text-white py-5">
+
+    <div class="container row">
+
+        <div class="col-md-6">
+
+            <h4>
+                Sports Vit - Cloud Computing
+            </h4>
+
+            <p class="text-white-50">
+                Gear Up. Play Strong. Go Further.
+            </p>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <b>Shop</b>
+
+            <p class="mb-0">
+                Footwear · Sportswear<br>
+                Fitness · Outdoor · Accessories
+            </p>
+
+        </div>
+
+        <div class="col-md-3">
+
+            <b>Service</b>
+
+            <p class="mb-0">
+                Support · Returns · Maintenance
+            </p>
+
+        </div>
+
+    </div>
+
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{% static 'store/js/app.js' %}"></script>
+
+</body>
+</html>

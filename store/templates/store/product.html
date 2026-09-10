@@ -1,0 +1,649 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<style>
+    :root {
+        --bg: #080b12;
+        --card: #10151f;
+        --card-hover: #151c28;
+        --border: rgba(255,255,255,.08);
+        --text: #f4f7fb;
+        --muted: #8d98aa;
+        --primary: #6366f1;
+        --primary-light: #818cf8;
+        --success: #22c55e;
+        --warning: #fbbf24;
+    }
+
+    body {
+        background:
+            radial-gradient(circle at 10% 10%, rgba(99,102,241,.12), transparent 30%),
+            radial-gradient(circle at 90% 20%, rgba(139,92,246,.10), transparent 30%),
+            var(--bg);
+        color: var(--text);
+    }
+
+    .product-dashboard {
+        max-width: 1400px;
+        margin: auto;
+    }
+
+    /* Dashboard Header */
+    .dashboard-header {
+        background: linear-gradient(
+            135deg,
+            rgba(99,102,241,.18),
+            rgba(15,23,42,.7)
+        );
+        border: 1px solid var(--border);
+        border-radius: 24px;
+        padding: 28px 32px;
+        margin-bottom: 28px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.25);
+    }
+
+    .dashboard-header h2 {
+        font-weight: 800;
+        letter-spacing: -.5px;
+        margin: 0;
+    }
+
+    .dashboard-header p {
+        color: var(--muted);
+        margin: 5px 0 0;
+    }
+
+    .dashboard-badge {
+        background: rgba(99,102,241,.15);
+        border: 1px solid rgba(129,140,248,.25);
+        color: var(--primary-light);
+        padding: 8px 14px;
+        border-radius: 50px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* Main Product Card */
+    .product-main-card {
+        background: rgba(16,21,31,.92);
+        border: 1px solid var(--border);
+        border-radius: 28px;
+        padding: 25px;
+        box-shadow: 0 25px 80px rgba(0,0,0,.35);
+        backdrop-filter: blur(15px);
+    }
+
+    /* Product Image */
+    .product-image-wrapper {
+        position: relative;
+        background: #0c111a;
+        border-radius: 22px;
+        padding: 20px;
+        height: 100%;
+        min-height: 500px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        border: 1px solid var(--border);
+    }
+
+    .product-image-wrapper::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        background: var(--primary);
+        filter: blur(130px);
+        opacity: .12;
+        border-radius: 50%;
+    }
+
+    .product-image-wrapper img {
+        position: relative;
+        max-height: 480px;
+        width: 100%;
+        object-fit: contain;
+        transition: transform .4s ease;
+        z-index: 1;
+    }
+
+    .product-image-wrapper:hover img {
+        transform: scale(1.04);
+    }
+
+    /* Selection */
+    .product-select {
+        position: absolute;
+        top: 18px;
+        left: 18px;
+        z-index: 5;
+    }
+
+    .product-select input {
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        accent-color: var(--primary);
+    }
+
+    .select-label {
+        position: absolute;
+        top: 17px;
+        left: 50px;
+        z-index: 5;
+        background: rgba(8,11,18,.8);
+        backdrop-filter: blur(10px);
+        padding: 7px 13px;
+        border-radius: 30px;
+        color: #dbe3f0;
+        font-size: 12px;
+        border: 1px solid var(--border);
+    }
+
+    /* Product Details */
+    .category-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        color: var(--primary-light);
+        background: rgba(99,102,241,.12);
+        border: 1px solid rgba(99,102,241,.2);
+        padding: 7px 13px;
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 14px;
+    }
+
+    .product-title {
+        font-size: clamp(30px, 4vw, 48px);
+        line-height: 1.05;
+        font-weight: 850;
+        letter-spacing: -1.5px;
+        margin-bottom: 18px;
+    }
+
+    .rating-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #0b1018;
+        border: 1px solid var(--border);
+        padding: 9px 14px;
+        border-radius: 12px;
+        margin-bottom: 22px;
+    }
+
+    .stars {
+        color: var(--warning);
+        letter-spacing: 2px;
+    }
+
+    .rating-number {
+        color: var(--muted);
+        font-size: 14px;
+    }
+
+    .price {
+        font-size: 38px;
+        font-weight: 800;
+        color: #fff;
+        margin-bottom: 18px;
+    }
+
+    .price::first-letter {
+        color: var(--primary-light);
+    }
+
+    .description {
+        color: #aeb8c8;
+        font-size: 16px;
+        line-height: 1.8;
+        background: rgba(255,255,255,.025);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        margin-bottom: 20px;
+    }
+
+    .stock-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 9px 15px;
+        background: rgba(34,197,94,.1);
+        color: #4ade80;
+        border: 1px solid rgba(34,197,94,.2);
+        border-radius: 30px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .stock-dot {
+        width: 7px;
+        height: 7px;
+        background: #22c55e;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #22c55e;
+    }
+
+    /* Buttons */
+    .action-area {
+        display: flex;
+        gap: 12px;
+        margin-top: 28px;
+    }
+
+    .add-cart-btn {
+        flex: 1;
+        border: none;
+        border-radius: 14px;
+        padding: 15px 22px;
+        font-weight: 700;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        box-shadow: 0 10px 25px rgba(99,102,241,.25);
+        transition: all .25s ease;
+    }
+
+    .add-cart-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 15px 35px rgba(99,102,241,.4);
+    }
+
+    .wishlist-btn {
+        width: 58px;
+        border-radius: 14px !important;
+        border-color: rgba(255,255,255,.12) !important;
+        color: #cbd5e1 !important;
+        background: rgba(255,255,255,.04) !important;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all .25s ease;
+    }
+
+    .wishlist-btn:hover {
+        color: #f43f5e !important;
+        border-color: rgba(244,63,94,.4) !important;
+        background: rgba(244,63,94,.1) !important;
+        transform: translateY(-2px);
+    }
+
+    .wishlist-btn i {
+        font-size: 22px;
+    }
+
+    /* Reviews */
+    .reviews-section {
+        margin-top: 35px;
+    }
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .section-header h3 {
+        font-size: 24px;
+        font-weight: 750;
+        margin: 0;
+    }
+
+    .review-count {
+        color: var(--muted);
+        font-size: 13px;
+    }
+
+    .review-card {
+        background: rgba(16,21,31,.9);
+        border: 1px solid var(--border) !important;
+        border-radius: 16px !important;
+        padding: 18px !important;
+        color: #dce3ed;
+        transition: background .2s ease, transform .2s ease;
+    }
+
+    .review-card:hover {
+        background: var(--card-hover);
+        transform: translateY(-2px);
+    }
+
+    .review-user {
+        color: #fff;
+        font-weight: 700;
+    }
+
+    .review-rating {
+        color: var(--warning);
+    }
+
+    .review-comment {
+        color: var(--muted);
+        line-height: 1.6;
+        margin-top: 6px;
+    }
+
+    .empty-reviews {
+        color: var(--muted);
+        background: rgba(255,255,255,.025);
+        border: 1px dashed var(--border);
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+    }
+
+    /* Selected Products Floating Bar */
+    .selection-bar {
+        position: sticky;
+        bottom: 20px;
+        z-index: 20;
+        margin-top: 25px;
+        background: rgba(15,23,42,.92);
+        backdrop-filter: blur(18px);
+        border: 1px solid rgba(129,140,248,.25);
+        border-radius: 18px;
+        padding: 14px 18px;
+        box-shadow: 0 20px 50px rgba(0,0,0,.4);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .selected-info {
+        color: #cbd5e1;
+        font-size: 14px;
+    }
+
+    .selected-count {
+        color: var(--primary-light);
+        font-weight: 800;
+    }
+
+    .clear-selection {
+        border: 1px solid var(--border);
+        background: rgba(255,255,255,.05);
+        color: #cbd5e1;
+        border-radius: 10px;
+        padding: 8px 14px;
+        font-size: 13px;
+        cursor: pointer;
+    }
+
+    .clear-selection:hover {
+        background: rgba(255,255,255,.1);
+    }
+
+    @media (max-width: 767px) {
+        .product-main-card {
+            padding: 15px;
+            border-radius: 20px;
+        }
+
+        .product-image-wrapper {
+            min-height: 320px;
+        }
+
+        .product-title {
+            font-size: 34px;
+        }
+
+        .price {
+            font-size: 32px;
+        }
+
+        .action-area {
+            flex-direction: column;
+        }
+
+        .wishlist-btn {
+            width: 100%;
+            height: 52px;
+        }
+    }
+</style>
+
+
+<div class="container-fluid py-4 product-dashboard">
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header d-flex flex-wrap justify-content-between align-items-center gap-3">
+        <div>
+            <h2>Product Dashboard</h2>
+            <p>Explore product details, ratings and customer reviews.</p>
+        </div>
+
+        <span class="dashboard-badge">
+            <i class="bi bi-grid-3x3-gap me-1"></i>
+            Product View
+        </span>
+    </div>
+
+
+    <!-- Main Product -->
+    <div class="product-main-card">
+
+        <div class="row g-4">
+
+            <!-- Product Image -->
+            <div class="col-lg-6">
+
+                <div class="product-image-wrapper">
+
+                    <!-- Multi Product Selection -->
+                    <div class="product-select">
+                        <input
+                            type="checkbox"
+                            class="product-checkbox"
+                            value="{{product.pk}}"
+                            onchange="updateSelection()"
+                            aria-label="Select {{product.name}}">
+                    </div>
+
+                    <span class="select-label">
+                        <i class="bi bi-check2-square me-1"></i>
+                        Select product
+                    </span>
+
+                    <img
+                        src="{{product.get_image}}"
+                        class="img-fluid rounded-4"
+                        alt="{{product.name}}">
+
+                </div>
+
+            </div>
+
+
+            <!-- Product Information -->
+            <div class="col-lg-6 d-flex align-items-center">
+
+                <div class="w-100">
+
+                    <span class="category-label">
+                        <i class="bi bi-tag"></i>
+                        {{product.category.name}}
+                    </span>
+
+                    <h1 class="product-title">
+                        {{product.name}}
+                    </h1>
+
+
+                    <!-- Rating -->
+                    <div class="rating-box">
+
+                        <span class="stars">
+                            ★★★★★
+                        </span>
+
+                        <span class="rating-number">
+                            {{product.rating}} / 5
+                        </span>
+
+                    </div>
+
+
+                    <!-- Price -->
+                    <h2 class="price">
+                        ₹{{product.price}}
+                    </h2>
+
+
+                    <!-- Description -->
+                    <div class="description">
+                        {{product.description}}
+                    </div>
+
+
+                    <!-- Inventory -->
+                    <div>
+                        <span class="stock-badge">
+                            <span class="stock-dot"></span>
+                            {{product.inventory.status|default:'In Stock'}}
+                        </span>
+                    </div>
+
+
+                    <!-- Actions -->
+                    <div class="action-area">
+
+                        <form
+                            action="{% url 'add_cart' product.pk %}"
+                            method="post"
+                            class="flex-grow-1">
+
+                            {% csrf_token %}
+
+                            <button class="btn btn-primary btn-lg add-cart-btn w-100">
+                                <i class="bi bi-cart-plus me-2"></i>
+                                Add to cart
+                            </button>
+
+                        </form>
+
+
+                        <a
+                            class="btn btn-outline-primary btn-lg wishlist-btn"
+                            href="{% url 'toggle_wishlist' product.pk %}">
+
+                            <i class="bi bi-heart"></i>
+
+                        </a>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- Reviews -->
+    <div class="reviews-section">
+
+        <div class="section-header">
+
+            <h3>
+                <i class="bi bi-chat-square-text me-2 text-primary"></i>
+                Reviews
+            </h3>
+
+            <span class="review-count">
+                Customer feedback
+            </span>
+
+        </div>
+
+
+        {% for r in product.reviews.all %}
+
+        <div class="review-card mb-3">
+
+            <div>
+                <span class="review-user">
+                    {{r.user.username}}
+                </span>
+
+                <span class="mx-2 text-muted">·</span>
+
+                <span class="review-rating">
+                    ⭐ {{r.rating}}
+                </span>
+            </div>
+
+            <div class="review-comment">
+                {{r.comment}}
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty-reviews">
+            <i class="bi bi-chat-left-dots fs-2 d-block mb-2 text-secondary"></i>
+            No reviews yet.
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+
+    <!-- Multi Product Selection Bar -->
+    <div class="selection-bar">
+
+        <div class="selected-info">
+            <i class="bi bi-check2-square me-2"></i>
+            <span class="selected-count" id="selectedCount">0</span>
+            product(s) selected
+        </div>
+
+        <button
+            type="button"
+            class="clear-selection"
+            onclick="clearSelection()">
+
+            <i class="bi bi-x-circle me-1"></i>
+            Clear
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+    function updateSelection() {
+
+        const selected = document.querySelectorAll(
+            '.product-checkbox:checked'
+        );
+
+        document.getElementById('selectedCount').textContent =
+            selected.length;
+    }
+
+
+    function clearSelection() {
+
+        document.querySelectorAll(
+            '.product-checkbox:checked'
+        ).forEach(function (checkbox) {
+
+            checkbox.checked = false;
+
+        });
+
+        updateSelection();
+    }
+</script>
+
+{% endblock %}

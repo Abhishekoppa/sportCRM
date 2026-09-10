@@ -1,0 +1,1564 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<style>
+/* =========================================================
+   SPORTIVA // FUTURE SPORTS SYSTEM
+   BLUE × BLACK // CYBER ATHLETICS
+   ========================================================= */
+
+:root {
+    --cyan: #00eaff;
+    --blue: #0066ff;
+    --deep-blue: #001b44;
+    --black: #02050b;
+    --card: rgba(5, 20, 42, 0.72);
+    --white: #f5fbff;
+}
+
+/* =========================================================
+   GLOBAL
+   ========================================================= */
+
+body {
+    background: #02050b;
+    color: var(--white);
+}
+
+a {
+    text-decoration: none;
+}
+
+.container {
+    position: relative;
+    z-index: 5;
+}
+
+
+/* =========================================================
+   FUTURISTIC HERO
+   ========================================================= */
+
+.future-hero {
+    position: relative;
+    min-height: 760px;
+    overflow: hidden;
+
+    display: flex;
+    align-items: center;
+
+    background:
+        radial-gradient(
+            circle at 75% 45%,
+            rgba(0, 234, 255, .18),
+            transparent 20%
+        ),
+        radial-gradient(
+            circle at 20% 80%,
+            rgba(0, 80, 255, .20),
+            transparent 30%
+        ),
+        linear-gradient(
+            135deg,
+            #01050d 0%,
+            #03152e 45%,
+            #020914 100%
+        );
+
+    border-bottom: 1px solid rgba(0,234,255,.25);
+}
+
+
+/* =========================================================
+   GRID
+   ========================================================= */
+
+.future-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background-image:
+        linear-gradient(
+            rgba(0,234,255,.06) 1px,
+            transparent 1px
+        ),
+        linear-gradient(
+            90deg,
+            rgba(0,234,255,.06) 1px,
+            transparent 1px
+        );
+
+    background-size: 50px 50px;
+
+    mask-image: linear-gradient(
+        to bottom,
+        transparent,
+        black 25%,
+        black 75%,
+        transparent
+    );
+
+    animation: cyberGrid 10s linear infinite;
+}
+
+@keyframes cyberGrid {
+    from {
+        transform: translateY(0);
+    }
+
+    to {
+        transform: translateY(50px);
+    }
+}
+
+
+/* =========================================================
+   GLOWING HORIZON
+   ========================================================= */
+
+.future-hero::after {
+    content: "";
+
+    position: absolute;
+    width: 900px;
+    height: 900px;
+
+    right: -300px;
+    top: -150px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle,
+            rgba(0,234,255,.13),
+            transparent 60%
+        );
+
+    filter: blur(30px);
+
+    animation: planetGlow 5s ease-in-out infinite;
+}
+
+@keyframes planetGlow {
+    0%,100% {
+        transform: scale(1);
+        opacity: .6;
+    }
+
+    50% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+}
+
+
+/* =========================================================
+   HUD CORNERS
+   ========================================================= */
+
+.hud {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+
+    border-color: rgba(0,234,255,.7);
+    z-index: 4;
+}
+
+.hud.tl {
+    top: 35px;
+    left: 35px;
+    border-top: 2px solid;
+    border-left: 2px solid;
+}
+
+.hud.tr {
+    top: 35px;
+    right: 35px;
+    border-top: 2px solid;
+    border-right: 2px solid;
+}
+
+.hud.bl {
+    bottom: 35px;
+    left: 35px;
+    border-bottom: 2px solid;
+    border-left: 2px solid;
+}
+
+.hud.br {
+    bottom: 35px;
+    right: 35px;
+    border-bottom: 2px solid;
+    border-right: 2px solid;
+}
+
+
+/* =========================================================
+   SPEED TRAILS
+   ========================================================= */
+
+.speed-trail {
+    position: absolute;
+    height: 2px;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        var(--cyan),
+        white,
+        transparent
+    );
+
+    box-shadow:
+        0 0 10px var(--cyan),
+        0 0 25px var(--blue);
+
+    transform: skewX(-35deg);
+
+    animation: speedTrail 2.5s linear infinite;
+}
+
+.speed-1 {
+    width: 350px;
+    top: 18%;
+    left: -400px;
+}
+
+.speed-2 {
+    width: 220px;
+    top: 31%;
+    left: -300px;
+    animation-delay: .7s;
+}
+
+.speed-3 {
+    width: 500px;
+    top: 68%;
+    left: -550px;
+    animation-delay: 1.4s;
+}
+
+.speed-4 {
+    width: 280px;
+    top: 82%;
+    left: -350px;
+    animation-delay: 1.9s;
+}
+
+@keyframes speedTrail {
+
+    0% {
+        transform: translateX(0) skewX(-35deg);
+        opacity: 0;
+    }
+
+    15% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateX(160vw) skewX(-35deg);
+        opacity: 0;
+    }
+}
+
+
+/* =========================================================
+   HERO CONTENT
+   ========================================================= */
+
+.future-content {
+    position: relative;
+    z-index: 10;
+
+    animation:
+        heroEnter 1s cubic-bezier(.2,.8,.2,1);
+}
+
+@keyframes heroEnter {
+
+    from {
+        opacity: 0;
+        transform: translateX(-80px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+
+/* =========================================================
+   SYSTEM LABEL
+   ========================================================= */
+
+.system-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    padding: 9px 16px;
+
+    color: var(--cyan);
+
+    background: rgba(0,234,255,.07);
+
+    border: 1px solid rgba(0,234,255,.4);
+
+    clip-path: polygon(
+        0 0,
+        calc(100% - 12px) 0,
+        100% 12px,
+        100% 100%,
+        12px 100%,
+        0 calc(100% - 12px)
+    );
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+
+    box-shadow:
+        0 0 20px rgba(0,234,255,.12);
+
+    animation: labelPulse 2s ease-in-out infinite;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+
+    border-radius: 50%;
+
+    background: #00ff9d;
+
+    box-shadow:
+        0 0 8px #00ff9d,
+        0 0 20px #00ff9d;
+
+    animation: statusBlink 1s infinite;
+}
+
+@keyframes statusBlink {
+
+    50% {
+        opacity: .25;
+    }
+}
+
+@keyframes labelPulse {
+
+    50% {
+        box-shadow:
+            0 0 30px rgba(0,234,255,.3);
+    }
+}
+
+
+/* =========================================================
+   HERO TITLE
+   ========================================================= */
+
+.future-title {
+    margin-top: 25px;
+
+    font-size: clamp(
+        3.5rem,
+        8vw,
+        7.5rem
+    );
+
+    font-weight: 950;
+
+    line-height: .88;
+
+    letter-spacing: -6px;
+
+    text-transform: uppercase;
+
+    color: white;
+
+    text-shadow:
+        0 10px 40px rgba(0,0,0,.7);
+}
+
+.future-title .neon {
+    display: inline-block;
+
+    color: transparent;
+
+    background:
+        linear-gradient(
+            90deg,
+            #00eaff,
+            #0077ff,
+            #00eaff
+        );
+
+    background-size: 200% auto;
+
+    -webkit-background-clip: text;
+    background-clip: text;
+
+    animation:
+        neonMove 3s linear infinite,
+        neonFloat 2.5s ease-in-out infinite;
+
+    filter:
+        drop-shadow(0 0 15px rgba(0,234,255,.7));
+}
+
+@keyframes neonMove {
+
+    to {
+        background-position: 200% center;
+    }
+}
+
+@keyframes neonFloat {
+
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+
+/* =========================================================
+   HERO DESCRIPTION
+   ========================================================= */
+
+.future-description {
+    max-width: 600px;
+
+    color: #9bb5d5;
+
+    font-size: 1.1rem;
+
+    line-height: 1.8;
+
+    margin-top: 25px;
+}
+
+
+/* =========================================================
+   FUTURE BUTTON
+   ========================================================= */
+
+.future-button {
+    display: inline-flex;
+
+    align-items: center;
+    gap: 12px;
+
+    margin-top: 25px;
+
+    padding: 15px 25px;
+
+    color: #00101f;
+
+    background:
+        linear-gradient(
+            135deg,
+            #ffffff,
+            #9ff7ff
+        );
+
+    font-weight: 900;
+
+    border: none;
+
+    position: relative;
+    overflow: hidden;
+
+    clip-path: polygon(
+        0 0,
+        calc(100% - 15px) 0,
+        100% 15px,
+        100% 100%,
+        15px 100%,
+        0 calc(100% - 15px)
+    );
+
+    box-shadow:
+        0 0 20px rgba(0,234,255,.25);
+
+    transition: .35s;
+}
+
+.future-button::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: -100%;
+
+    width: 60%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255,255,255,.9),
+        transparent
+    );
+
+    transform: skewX(-25deg);
+
+    animation: buttonScan 2.5s infinite;
+}
+
+@keyframes buttonScan {
+
+    0% {
+        left: -100%;
+    }
+
+    50%,100% {
+        left: 150%;
+    }
+}
+
+.future-button:hover {
+    color: #00101f;
+
+    transform:
+        translateY(-5px)
+        scale(1.04);
+
+    box-shadow:
+        0 10px 45px rgba(0,234,255,.5);
+}
+
+
+/* =========================================================
+   FUTURE SPORTS CORE
+   ========================================================= */
+
+.sports-core {
+
+    position: absolute;
+
+    right: 9%;
+    top: 50%;
+
+    width: 430px;
+    height: 430px;
+
+    transform: translateY(-50%);
+
+    z-index: 6;
+
+    animation: coreFloat 4s ease-in-out infinite;
+}
+
+@keyframes coreFloat {
+
+    0%,100% {
+        transform:
+            translateY(-50%)
+            rotate(-2deg);
+    }
+
+    50% {
+        transform:
+            translateY(calc(-50% - 18px))
+            rotate(2deg);
+    }
+}
+
+
+/* =========================================================
+   OUTER RINGS
+   ========================================================= */
+
+.core-ring {
+    position: absolute;
+
+    border-radius: 50%;
+
+    border: 1px solid rgba(0,234,255,.35);
+
+    box-shadow:
+        inset 0 0 20px rgba(0,234,255,.05),
+        0 0 20px rgba(0,234,255,.08);
+}
+
+.ring-1 {
+    inset: 10px;
+
+    animation: ringSpin 12s linear infinite;
+}
+
+.ring-2 {
+    inset: 40px;
+
+    border-style: dashed;
+
+    animation:
+        ringSpinReverse 9s linear infinite;
+}
+
+.ring-3 {
+    inset: 80px;
+
+    border-color: rgba(255,255,255,.15);
+
+    animation: ringSpin 6s linear infinite;
+}
+
+@keyframes ringSpin {
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes ringSpinReverse {
+
+    to {
+        transform: rotate(-360deg);
+    }
+}
+
+
+/* =========================================================
+   SPORTS BALL
+   ========================================================= */
+
+.future-ball {
+
+    position: absolute;
+
+    width: 250px;
+    height: 250px;
+
+    top: 90px;
+    left: 90px;
+
+    border-radius: 50%;
+
+    background:
+        radial-gradient(
+            circle at 32% 25%,
+            #ffffff 0 2%,
+            transparent 3%
+        ),
+        radial-gradient(
+            circle at 35% 30%,
+            #19efff 0%,
+            #0071ff 42%,
+            #001b52 72%,
+            #000611 100%
+        );
+
+    box-shadow:
+        inset -25px -30px 45px rgba(0,0,0,.55),
+        inset 15px 15px 35px rgba(255,255,255,.1),
+        0 0 30px rgba(0,234,255,.8),
+        0 0 80px rgba(0,90,255,.5);
+
+    animation: ballRotate 8s linear infinite;
+}
+
+@keyframes ballRotate {
+
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* =========================================================
+   BALL CIRCUITS
+   ========================================================= */
+
+.future-ball::before,
+.future-ball::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 25px;
+
+    border-radius: 50%;
+
+    border: 3px solid rgba(255,255,255,.55);
+}
+
+.future-ball::after {
+
+    transform:
+        rotate(65deg)
+        scaleX(.42);
+
+    border-color: rgba(0,234,255,.7);
+}
+
+
+/* =========================================================
+   CORE CENTER
+   ========================================================= */
+
+.core-center {
+
+    position: absolute;
+
+    width: 80px;
+    height: 80px;
+
+    left: 175px;
+    top: 175px;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    color: white;
+
+    background:
+        radial-gradient(
+            circle,
+            #00eaff,
+            #0066ff 40%,
+            #00102d 70%
+        );
+
+    border: 2px solid white;
+
+    box-shadow:
+        0 0 20px #00eaff,
+        0 0 60px #0066ff;
+
+    z-index: 3;
+
+    font-size: 25px;
+
+    animation: corePulse 1.8s ease-in-out infinite;
+}
+
+@keyframes corePulse {
+
+    50% {
+        transform: scale(1.15);
+
+        box-shadow:
+            0 0 30px #00eaff,
+            0 0 90px #0066ff;
+    }
+}
+
+
+/* =========================================================
+   FLOATING SPORTS ICONS
+   ========================================================= */
+
+.future-icon {
+
+    position: absolute;
+
+    z-index: 12;
+
+    width: 65px;
+    height: 65px;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 18px;
+
+    background:
+        rgba(2,15,35,.7);
+
+    border: 1px solid rgba(0,234,255,.35);
+
+    backdrop-filter: blur(10px);
+
+    font-size: 32px;
+
+    box-shadow:
+        0 0 25px rgba(0,234,255,.15);
+
+    animation: iconFloat 3s ease-in-out infinite;
+}
+
+.fi-1 {
+    right: 36%;
+    top: 16%;
+}
+
+.fi-2 {
+    right: 4%;
+    top: 28%;
+    animation-delay: .6s;
+}
+
+.fi-3 {
+    right: 31%;
+    bottom: 16%;
+    animation-delay: 1.2s;
+}
+
+.fi-4 {
+    right: 7%;
+    bottom: 13%;
+    animation-delay: 1.8s;
+}
+
+@keyframes iconFloat {
+
+    0%,100% {
+        transform:
+            translateY(0)
+            rotate(-5deg);
+    }
+
+    50% {
+        transform:
+            translateY(-18px)
+            rotate(8deg);
+    }
+}
+
+
+/* =========================================================
+   PARTICLES
+   ========================================================= */
+
+.future-particle {
+
+    position: absolute;
+
+    width: 5px;
+    height: 5px;
+
+    border-radius: 50%;
+
+    background: var(--cyan);
+
+    box-shadow:
+        0 0 10px var(--cyan),
+        0 0 20px var(--blue);
+
+    animation: particleFly 5s linear infinite;
+}
+
+.fp1 {
+    left: 12%;
+    top: 30%;
+}
+
+.fp2 {
+    left: 30%;
+    top: 75%;
+    animation-delay: 1s;
+}
+
+.fp3 {
+    left: 65%;
+    top: 20%;
+    animation-delay: 2s;
+}
+
+.fp4 {
+    left: 82%;
+    top: 65%;
+    animation-delay: 3s;
+}
+
+.fp5 {
+    left: 50%;
+    top: 50%;
+    animation-delay: 1.5s;
+}
+
+@keyframes particleFly {
+
+    0% {
+        opacity: 0;
+        transform:
+            translateY(100px)
+            scale(.3);
+    }
+
+    50% {
+        opacity: 1;
+        transform:
+            translateY(-50px)
+            scale(1.5);
+    }
+
+    100% {
+        opacity: 0;
+        transform:
+            translateY(-180px)
+            scale(.2);
+    }
+}
+
+
+/* =========================================================
+   STATS / HUD
+   ========================================================= */
+
+.hero-stats {
+
+    display: flex;
+
+    gap: 35px;
+
+    margin-top: 45px;
+}
+
+.hero-stat {
+
+    position: relative;
+
+    padding-left: 15px;
+
+    border-left: 2px solid var(--cyan);
+}
+
+.hero-stat strong {
+
+    display: block;
+
+    font-size: 1.4rem;
+
+    color: white;
+}
+
+.hero-stat span {
+
+    color: #6785a8;
+
+    font-size: .7rem;
+
+    letter-spacing: 2px;
+
+    text-transform: uppercase;
+}
+
+
+/* =========================================================
+   CATEGORY SECTION
+   ========================================================= */
+
+.sport-section {
+
+    position: relative;
+
+    background:
+        linear-gradient(
+            180deg,
+            #02050b,
+            #031024
+        );
+
+    padding: 90px 0;
+}
+
+
+/* =========================================================
+   SECTION HEADER
+   ========================================================= */
+
+.section-kicker {
+
+    color: var(--cyan);
+
+    font-size: .75rem;
+
+    font-weight: 800;
+
+    letter-spacing: 3px;
+
+    text-transform: uppercase;
+}
+
+.section-title {
+
+    font-size: clamp(
+        2rem,
+        4vw,
+        3.5rem
+    );
+
+    font-weight: 900;
+
+    letter-spacing: -2px;
+}
+
+
+/* =========================================================
+   CATEGORY CARD
+   ========================================================= */
+
+.future-category {
+
+    position: relative;
+
+    display: block;
+
+    min-height: 220px;
+
+    overflow: hidden;
+
+    padding: 25px;
+
+    border-radius: 20px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(8,30,62,.9),
+            rgba(2,8,18,.95)
+        );
+
+    border: 1px solid rgba(0,234,255,.18);
+
+    box-shadow:
+        inset 0 0 30px rgba(0,234,255,.025);
+
+    transition:
+        transform .4s,
+        border .4s,
+        box-shadow .4s;
+}
+
+.future-category::before {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        linear-gradient(
+            120deg,
+            transparent 25%,
+            rgba(0,234,255,.18),
+            transparent 75%
+        );
+
+    transform:
+        translateX(-120%);
+
+    transition: .7s;
+}
+
+.future-category:hover {
+
+    transform:
+        translateY(-10px)
+        scale(1.025);
+
+    border-color:
+        rgba(0,234,255,.7);
+
+    box-shadow:
+        0 20px 60px rgba(0,80,255,.25),
+        0 0 30px rgba(0,234,255,.1);
+}
+
+.future-category:hover::before {
+
+    transform:
+        translateX(120%);
+}
+
+.future-category img {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    opacity: .28;
+
+    transition: .5s;
+}
+
+.future-category:hover img {
+
+    opacity: .42;
+
+    transform: scale(1.08);
+}
+
+.category-content {
+
+    position: absolute;
+
+    left: 25px;
+    bottom: 22px;
+
+    z-index: 2;
+}
+
+.category-content small {
+
+    display: block;
+
+    color: var(--cyan);
+
+    letter-spacing: 2px;
+
+    font-size: .65rem;
+
+    margin-bottom: 5px;
+}
+
+.category-content b {
+
+    font-size: 1.35rem;
+
+    color: white;
+}
+
+
+/* =========================================================
+   TRENDING PRODUCTS
+   ========================================================= */
+
+.trending-section {
+
+    padding: 30px 0 100px;
+
+    background: #02050b;
+}
+
+.product-wrapper {
+
+    position: relative;
+
+    transition: .4s;
+}
+
+.product-wrapper:hover {
+
+    transform:
+        translateY(-8px);
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 992px) {
+
+    .future-hero {
+
+        min-height: 800px;
+
+        align-items: flex-start;
+    }
+
+    .future-content {
+
+        padding-top: 80px;
+    }
+
+    .sports-core {
+
+        opacity: .22;
+
+        right: -90px;
+
+        top: 58%;
+    }
+
+    .future-title {
+
+        font-size: clamp(
+            3rem,
+            12vw,
+            5rem
+        );
+    }
+
+    .fi-1 {
+        right: 45%;
+    }
+}
+
+
+@media (max-width: 768px) {
+
+    .future-hero {
+
+        min-height: 760px;
+    }
+
+    .future-title {
+
+        letter-spacing: -3px;
+
+        line-height: .95;
+    }
+
+    .future-description {
+
+        font-size: .95rem;
+    }
+
+    .hero-stats {
+
+        gap: 20px;
+
+        flex-wrap: wrap;
+    }
+
+    .sports-core {
+
+        transform:
+            translateY(-50%)
+            scale(.7);
+
+        right: -140px;
+    }
+
+    .future-icon {
+
+        opacity: .35;
+    }
+
+    .hud {
+
+        opacity: .35;
+    }
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+
+        animation-duration: .01ms !important;
+
+        animation-iteration-count: 1 !important;
+
+        scroll-behavior: auto !important;
+    }
+}
+
+</style>
+
+
+<!-- =========================================================
+     FUTURISTIC HERO
+     ========================================================= -->
+
+<section class="future-hero">
+
+    <!-- HUD CORNERS -->
+
+    <div class="hud tl"></div>
+    <div class="hud tr"></div>
+    <div class="hud bl"></div>
+    <div class="hud br"></div>
+
+
+    <!-- SPEED TRAILS -->
+
+    <div class="speed-trail speed-1"></div>
+    <div class="speed-trail speed-2"></div>
+    <div class="speed-trail speed-3"></div>
+    <div class="speed-trail speed-4"></div>
+
+
+    <!-- PARTICLES -->
+
+    <div class="future-particle fp1"></div>
+    <div class="future-particle fp2"></div>
+    <div class="future-particle fp3"></div>
+    <div class="future-particle fp4"></div>
+    <div class="future-particle fp5"></div>
+
+
+    <!-- SPORTS ICONS -->
+
+    <div class="future-icon fi-1">
+        ⚽
+    </div>
+
+    <div class="future-icon fi-2">
+        🏀
+    </div>
+
+    <div class="future-icon fi-3">
+        🏸
+    </div>
+
+    <div class="future-icon fi-4">
+        🏆
+    </div>
+
+
+    <!-- FUTURE SPORTS CORE -->
+
+    <div class="sports-core">
+
+        <div class="core-ring ring-1"></div>
+
+        <div class="core-ring ring-2"></div>
+
+        <div class="core-ring ring-3"></div>
+
+        <div class="future-ball"></div>
+
+        <div class="core-center">
+            ⚡
+        </div>
+
+    </div>
+
+
+    <!-- HERO CONTENT -->
+
+    <div class="container">
+
+        <div class="row align-items-center">
+
+            <div class="col-lg-7 future-content">
+
+                <div class="system-label">
+
+                    <span class="status-dot"></span>
+
+                    SPORTIVA // PERFORMANCE SYSTEM
+
+                </div>
+
+
+                <h1 class="future-title">
+
+                    GEAR UP.<br>
+
+                    <span class="neon">
+                        PLAY STRONG.
+                    </span>
+
+                    <br>
+
+                    GO FURTHER.
+
+                </h1>
+
+
+                <p class="future-description">
+
+                    Enter the next generation of sport.
+                    Discover high-performance equipment engineered
+                    for athletes who refuse to stay ordinary.
+
+                </p>
+
+
+                <a
+                    class="future-button"
+                    href="{% url 'products' %}"
+                >
+
+                    EXPLORE COLLECTION
+
+                    <i class="bi bi-arrow-up-right"></i>
+
+                </a>
+
+
+                <!-- HERO STATS -->
+
+                <div class="hero-stats">
+
+                    <div class="hero-stat">
+
+                        <strong>01</strong>
+
+                        <span>
+                            Performance
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-stat">
+
+                        <strong>24/7</strong>
+
+                        <span>
+                            Athlete Ready
+                        </span>
+
+                    </div>
+
+
+                    <div class="hero-stat">
+
+                        <strong>∞</strong>
+
+                        <span>
+                            Push Limits
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     SHOP BY CATEGORY
+     ========================================================= -->
+
+<section class="sport-section">
+
+    <div class="container">
+
+        <div class="d-flex justify-content-between align-items-end mb-5">
+
+            <div>
+
+                <div class="section-kicker">
+                    // SELECT YOUR ARENA
+                </div>
+
+                <h2 class="section-title mb-0">
+                    Shop by Sport
+                </h2>
+
+            </div>
+
+
+            <a
+                href="{% url 'products' %}"
+                class="text-info fw-bold"
+            >
+                VIEW ALL →
+            </a>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for c in categories %}
+
+            <div class="col-6 col-md-4 col-lg">
+
+                <a
+                    class="future-category"
+                    href="{% url 'products' %}?category={{ c.slug }}"
+                >
+
+                    {% if c.image %}
+
+                    <img
+                        src="{{ c.image }}"
+                        alt="{{ c.name }}"
+                    >
+
+                    {% endif %}
+
+
+                    <div class="category-content">
+
+                        <small>
+                            SPORT 0{{ forloop.counter }}
+                        </small>
+
+                        <b>
+                            {{ c.name }}
+                        </b>
+
+                    </div>
+
+                </a>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================================================
+     TRENDING PRODUCTS
+     ========================================================= -->
+
+<section class="trending-section">
+
+    <div class="container">
+
+        <div class="mb-5">
+
+            <div class="section-kicker">
+                // LIVE MARKET
+            </div>
+
+            <h2 class="section-title">
+                Trending Now
+            </h2>
+
+            <p class="text-secondary">
+                High-performance gear currently dominating
+                the Sportiva collection.
+            </p>
+
+        </div>
+
+
+        <div class="row g-4">
+
+            {% for p in featured|default:products %}
+
+            <div class="col-6 col-md-3 product-wrapper">
+
+                {% include 'store/product_card.html' with p=p %}
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+    </div>
+
+</section>
+
+
+{% endblock %}

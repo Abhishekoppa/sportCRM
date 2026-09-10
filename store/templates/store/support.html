@@ -1,0 +1,667 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<style>
+    /* ================================
+       SUPPORT PAGE — CRAZY BEAUTIFUL UI
+       ================================ */
+
+    .support-page {
+        position: relative;
+        min-height: 100vh;
+        padding: 70px 0 100px;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.18), transparent 30%),
+            radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.16), transparent 28%),
+            radial-gradient(circle at 80% 80%, rgba(14, 165, 233, 0.14), transparent 30%),
+            linear-gradient(135deg, #f8fafc 0%, #eef2ff 45%, #fdf2f8 100%);
+    }
+
+    .support-page::before,
+    .support-page::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(2px);
+        pointer-events: none;
+    }
+
+    .support-page::before {
+        width: 350px;
+        height: 350px;
+        top: -100px;
+        left: -120px;
+        background: linear-gradient(135deg, rgba(99,102,241,.22), rgba(168,85,247,.08));
+        animation: floatBlob 8s ease-in-out infinite;
+    }
+
+    .support-page::after {
+        width: 420px;
+        height: 420px;
+        right: -170px;
+        bottom: -150px;
+        background: linear-gradient(135deg, rgba(236,72,153,.18), rgba(14,165,233,.08));
+        animation: floatBlob 10s ease-in-out infinite reverse;
+    }
+
+    .support-container {
+        position: relative;
+        z-index: 2;
+    }
+
+    /* HERO */
+
+    .support-hero {
+        position: relative;
+        margin-bottom: 45px;
+        padding: 45px;
+        border-radius: 32px;
+        overflow: hidden;
+        color: white;
+        background:
+            linear-gradient(135deg, #111827 0%, #312e81 48%, #7c3aed 100%);
+        box-shadow:
+            0 30px 70px rgba(49, 46, 129, .25),
+            inset 0 1px 0 rgba(255,255,255,.15);
+    }
+
+    .support-hero::before {
+        content: "";
+        position: absolute;
+        width: 300px;
+        height: 300px;
+        right: -80px;
+        top: -120px;
+        border-radius: 50%;
+        background: rgba(255,255,255,.08);
+        box-shadow:
+            -120px 190px 0 20px rgba(255,255,255,.035),
+            -250px 50px 0 35px rgba(255,255,255,.025);
+    }
+
+    .support-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+            linear-gradient(90deg, transparent 0%, rgba(255,255,255,.035) 50%, transparent 100%);
+        transform: translateX(-100%);
+        animation: shine 5s infinite;
+    }
+
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        margin-bottom: 18px;
+        border: 1px solid rgba(255,255,255,.18);
+        border-radius: 999px;
+        background: rgba(255,255,255,.09);
+        backdrop-filter: blur(12px);
+        font-size: 13px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+    }
+
+    .hero-badge span {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #4ade80;
+        box-shadow: 0 0 14px #4ade80;
+        animation: pulse 2s infinite;
+    }
+
+    .support-hero h1 {
+        margin: 0 0 12px;
+        font-size: clamp(2.4rem, 5vw, 4.5rem);
+        font-weight: 900;
+        line-height: 1;
+        letter-spacing: -3px;
+        background: linear-gradient(90deg, #fff, #c4b5fd, #f9a8d4);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .support-hero p {
+        max-width: 650px;
+        margin: 0;
+        color: rgba(255,255,255,.72);
+        font-size: 17px;
+        line-height: 1.7;
+    }
+
+    /* GRID */
+
+    .support-grid {
+        display: grid;
+        grid-template-columns: minmax(0, 1.1fr) minmax(300px, .9fr);
+        gap: 28px;
+        align-items: start;
+    }
+
+    /* FORM CARD */
+
+    .support-form-card {
+        position: relative;
+        border: 1px solid rgba(255,255,255,.75);
+        border-radius: 28px;
+        padding: 32px;
+        background: rgba(255,255,255,.72);
+        backdrop-filter: blur(22px);
+        -webkit-backdrop-filter: blur(22px);
+        box-shadow:
+            0 25px 60px rgba(15,23,42,.10),
+            inset 0 1px 0 rgba(255,255,255,.9);
+        transition: transform .35s ease, box-shadow .35s ease;
+    }
+
+    .support-form-card:hover {
+        transform: translateY(-6px);
+        box-shadow:
+            0 35px 75px rgba(15,23,42,.14),
+            0 0 0 1px rgba(99,102,241,.08);
+    }
+
+    .form-heading {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 25px;
+    }
+
+    .form-icon {
+        display: grid;
+        place-items: center;
+        width: 54px;
+        height: 54px;
+        flex-shrink: 0;
+        border-radius: 17px;
+        color: white;
+        font-size: 24px;
+        background: linear-gradient(135deg, #6366f1, #8b5cf6);
+        box-shadow: 0 12px 25px rgba(99,102,241,.30);
+    }
+
+    .form-heading h2 {
+        margin: 0;
+        color: #111827;
+        font-size: 24px;
+        font-weight: 800;
+    }
+
+    .form-heading p {
+        margin: 3px 0 0;
+        color: #64748b;
+        font-size: 13px;
+    }
+
+    /* INPUTS */
+
+    .support-form-card .form-control,
+    .support-form-card .form-select {
+        min-height: 54px;
+        border: 2px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 13px 16px;
+        color: #1e293b;
+        background: rgba(255,255,255,.8);
+        box-shadow: none;
+        transition:
+            border-color .25s ease,
+            box-shadow .25s ease,
+            transform .25s ease,
+            background .25s ease;
+    }
+
+    .support-form-card textarea.form-control {
+        min-height: 155px;
+        resize: vertical;
+    }
+
+    .support-form-card .form-control::placeholder {
+        color: #94a3b8;
+    }
+
+    .support-form-card .form-control:focus,
+    .support-form-card .form-select:focus {
+        border-color: #6366f1;
+        background: white;
+        box-shadow:
+            0 0 0 4px rgba(99,102,241,.10),
+            0 12px 25px rgba(99,102,241,.07);
+        transform: translateY(-2px);
+    }
+
+    /* BUTTON */
+
+    .support-form-card .btn-primary {
+        position: relative;
+        width: 100%;
+        min-height: 56px;
+        margin-top: 8px;
+        overflow: hidden;
+        border: 0;
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 800;
+        letter-spacing: .3px;
+        background: linear-gradient(135deg, #4f46e5, #7c3aed, #db2777);
+        background-size: 200% 200%;
+        box-shadow:
+            0 15px 30px rgba(99,102,241,.25),
+            inset 0 1px 0 rgba(255,255,255,.2);
+        transition:
+            transform .25s ease,
+            box-shadow .25s ease,
+            background-position .4s ease;
+    }
+
+    .support-form-card .btn-primary::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 70%;
+        height: 100%;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            rgba(255,255,255,.25),
+            transparent
+        );
+        transform: skewX(-20deg);
+        transition: left .6s ease;
+    }
+
+    .support-form-card .btn-primary:hover {
+        transform: translateY(-3px);
+        background-position: 100% 50%;
+        box-shadow:
+            0 20px 40px rgba(99,102,241,.35),
+            0 0 25px rgba(168,85,247,.15);
+    }
+
+    .support-form-card .btn-primary:hover::before {
+        left: 140%;
+    }
+
+    .support-form-card .btn-primary:active {
+        transform: translateY(0);
+    }
+
+    /* REQUESTS */
+
+    .requests-panel {
+        position: relative;
+    }
+
+    .requests-title {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+    }
+
+    .requests-title h2 {
+        margin: 0;
+        color: #0f172a;
+        font-size: 25px;
+        font-weight: 850;
+        letter-spacing: -.5px;
+    }
+
+    .request-count {
+        padding: 7px 12px;
+        border-radius: 999px;
+        color: #4338ca;
+        background: #eef2ff;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .request-item {
+        position: relative;
+        margin-bottom: 14px;
+        padding: 22px 23px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.85);
+        border-radius: 20px;
+        background: rgba(255,255,255,.68);
+        backdrop-filter: blur(18px);
+        box-shadow: 0 12px 30px rgba(15,23,42,.07);
+        transition:
+            transform .3s ease,
+            box-shadow .3s ease,
+            border-color .3s ease;
+    }
+
+    .request-item::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(180deg, #6366f1, #ec4899);
+        border-radius: 4px;
+    }
+
+    .request-item:hover {
+        transform: translateX(7px) translateY(-2px);
+        border-color: rgba(99,102,241,.25);
+        box-shadow: 0 20px 40px rgba(15,23,42,.11);
+    }
+
+    .request-subject {
+        display: inline-block;
+        margin-bottom: 7px;
+        color: #111827;
+        font-size: 16px;
+        font-weight: 800;
+    }
+
+    .request-status {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 6px;
+        padding: 5px 10px;
+        border-radius: 999px;
+        color: #047857;
+        background: #d1fae5;
+        font-size: 10px;
+        font-weight: 900;
+        letter-spacing: .7px;
+        text-transform: uppercase;
+    }
+
+    .request-description {
+        margin: 4px 0 0;
+        color: #64748b;
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+    /* EMPTY STATE */
+
+    .empty-state {
+        padding: 45px 25px;
+        text-align: center;
+        border: 2px dashed #cbd5e1;
+        border-radius: 24px;
+        color: #64748b;
+        background: rgba(255,255,255,.45);
+    }
+
+    .empty-icon {
+        display: grid;
+        place-items: center;
+        width: 65px;
+        height: 65px;
+        margin: 0 auto 15px;
+        border-radius: 20px;
+        color: #6366f1;
+        background: #eef2ff;
+        font-size: 28px;
+    }
+
+    .empty-state p {
+        margin: 0;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* FLOATING DECORATION */
+
+    .floating-orb {
+        position: absolute;
+        z-index: 1;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #a78bfa;
+        box-shadow: 0 0 20px #a78bfa;
+        animation: floatOrb 6s ease-in-out infinite;
+    }
+
+    .orb-one {
+        top: 35%;
+        left: 4%;
+    }
+
+    .orb-two {
+        top: 65%;
+        right: 5%;
+        width: 8px;
+        height: 8px;
+        background: #f472b6;
+        box-shadow: 0 0 18px #f472b6;
+        animation-delay: 1.5s;
+    }
+
+    .orb-three {
+        top: 18%;
+        right: 15%;
+        width: 6px;
+        height: 6px;
+        background: #38bdf8;
+        box-shadow: 0 0 15px #38bdf8;
+        animation-delay: 3s;
+    }
+
+    /* ANIMATIONS */
+
+    @keyframes floatBlob {
+        0%, 100% {
+            transform: translate3d(0, 0, 0) scale(1);
+        }
+        50% {
+            transform: translate3d(20px, 25px, 0) scale(1.06);
+        }
+    }
+
+    @keyframes floatOrb {
+        0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: .7;
+        }
+        50% {
+            transform: translateY(-25px) translateX(15px);
+            opacity: 1;
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+        50% {
+            transform: scale(1.35);
+            opacity: .7;
+        }
+    }
+
+    @keyframes shine {
+        0% {
+            transform: translateX(-100%);
+        }
+        25%, 100% {
+            transform: translateX(150%);
+        }
+    }
+
+    /* RESPONSIVE */
+
+    @media (max-width: 991px) {
+        .support-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .support-hero {
+            padding: 35px 28px;
+        }
+    }
+
+    @media (max-width: 576px) {
+        .support-page {
+            padding: 35px 0 70px;
+        }
+
+        .support-hero {
+            padding: 30px 22px;
+            border-radius: 24px;
+        }
+
+        .support-hero h1 {
+            font-size: 2.7rem;
+            letter-spacing: -2px;
+        }
+
+        .support-hero p {
+            font-size: 15px;
+        }
+
+        .support-form-card {
+            padding: 22px;
+            border-radius: 22px;
+        }
+
+        .request-item {
+            padding: 18px;
+        }
+    }
+</style>
+
+<div class="support-page">
+
+    <div class="floating-orb orb-one"></div>
+    <div class="floating-orb orb-two"></div>
+    <div class="floating-orb orb-three"></div>
+
+    <div class="container support-container">
+
+        <!-- HERO -->
+        <div class="support-hero">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <span></span>
+                    We're here to help
+                </div>
+
+                <h1>Support & Service</h1>
+
+                <p>
+                    Need help with your order, product, return, or repair?
+                    Send us a request and our support team will take care of the rest.
+                </p>
+            </div>
+        </div>
+
+        <!-- MAIN CONTENT -->
+        <div class="support-grid">
+
+            <!-- REQUEST FORM -->
+            <form method="post" class="support-form-card">
+                {% csrf_token %}
+
+                <div class="form-heading">
+                    <div class="form-icon">
+                        ✦
+                    </div>
+
+                    <div>
+                        <h2>Create a Request</h2>
+                        <p>Tell us what you need and we'll help you out.</p>
+                    </div>
+                </div>
+
+                <select name="request_type" class="form-select mb-2">
+                    <option>SUPPORT</option>
+                    <option>RETURN</option>
+                    <option>REPAIR</option>
+                </select>
+
+                <input
+                    name="subject"
+                    class="form-control mb-2"
+                    placeholder="Subject"
+                    required
+                >
+
+                <textarea
+                    name="description"
+                    class="form-control mb-2"
+                    placeholder="Describe your request"
+                    required
+                ></textarea>
+
+                <button class="btn btn-primary">
+                    Submit request ✦
+                </button>
+            </form>
+
+            <!-- REQUEST LIST -->
+            <div class="requests-panel">
+
+                <div class="requests-title">
+                    <h2>Your Requests</h2>
+
+                    {% if requests %}
+                        <span class="request-count">
+                            {{ requests|length }} REQUESTS
+                        </span>
+                    {% endif %}
+                </div>
+
+                {% for r in requests %}
+
+                    <div class="request-item">
+
+                        <span class="request-subject">
+                            {{r.subject}}
+                        </span>
+
+                        <span class="request-status">
+                            {{r.status}}
+                        </span>
+
+                        <p class="request-description">
+                            {{r.description}}
+                        </p>
+
+                    </div>
+
+                {% empty %}
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">
+                            ✦
+                        </div>
+
+                        <p>No requests yet. You're all caught up!</p>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

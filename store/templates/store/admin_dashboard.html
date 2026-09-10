@@ -1,0 +1,1534 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+
+<style>
+    * {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: #050816 !important;
+    }
+
+    .sportiva-dashboard {
+        min-height: 100vh;
+        padding: 35px 0 70px;
+        color: #fff;
+        overflow: hidden;
+        background:
+            radial-gradient(circle at 10% 10%, rgba(99,102,241,.20), transparent 30%),
+            radial-gradient(circle at 90% 15%, rgba(236,72,153,.16), transparent 28%),
+            radial-gradient(circle at 50% 100%, rgba(14,165,233,.12), transparent 35%),
+            #050816;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .dashboard-header {
+        position: relative;
+        overflow: hidden;
+        padding: 38px;
+        margin-bottom: 28px;
+        border-radius: 30px;
+        background:
+            linear-gradient(
+                135deg,
+                rgba(99,102,241,.24),
+                rgba(236,72,153,.10)
+            ),
+            rgba(15,23,42,.82);
+        border: 1px solid rgba(255,255,255,.10);
+        box-shadow:
+            0 25px 80px rgba(0,0,0,.40),
+            inset 0 1px 0 rgba(255,255,255,.05);
+        backdrop-filter: blur(20px);
+    }
+
+    .dashboard-header::before {
+        content: "";
+        position: absolute;
+        width: 260px;
+        height: 260px;
+        border-radius: 50%;
+        right: -80px;
+        top: -130px;
+        background: rgba(99,102,241,.20);
+        filter: blur(10px);
+        animation: floatingOrb 7s ease-in-out infinite;
+    }
+
+    .dashboard-header::after {
+        content: "";
+        position: absolute;
+        width: 180px;
+        height: 180px;
+        border-radius: 50%;
+        left: 45%;
+        bottom: -130px;
+        background: rgba(236,72,153,.18);
+        filter: blur(15px);
+        animation: floatingOrb 9s ease-in-out infinite reverse;
+    }
+
+    .dashboard-header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .dashboard-header h1 {
+        margin: 0;
+        font-size: clamp(2rem, 5vw, 3.4rem);
+        font-weight: 950;
+        letter-spacing: -2px;
+        background: linear-gradient(
+            90deg,
+            #ffffff,
+            #a5b4fc,
+            #f9a8d4
+        );
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .dashboard-subtitle {
+        margin-top: 10px;
+        color: #94a3b8;
+        font-size: 1rem;
+    }
+
+    .dashboard-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 20px;
+        padding: 9px 15px;
+        border-radius: 50px;
+        color: #86efac;
+        background: rgba(34,197,94,.08);
+        border: 1px solid rgba(34,197,94,.20);
+        font-size: .78rem;
+        font-weight: 800;
+        letter-spacing: .7px;
+    }
+
+    .live-dot {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 15px #22c55e;
+        animation: pulse 1.4s infinite;
+    }
+
+    /* =========================
+       STAT CARDS
+       ========================= */
+
+    .stat-card {
+        position: relative;
+        overflow: hidden;
+        min-height: 180px;
+        padding: 25px;
+        border-radius: 24px;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(30,41,59,.95),
+                rgba(15,23,42,.86)
+            );
+        border: 1px solid rgba(255,255,255,.08);
+        box-shadow: 0 18px 55px rgba(0,0,0,.30);
+        transition:
+            transform .35s ease,
+            box-shadow .35s ease,
+            border-color .35s ease;
+        animation: cardIn .7s ease both;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-10px) scale(1.02);
+        border-color: rgba(129,140,248,.55);
+        box-shadow:
+            0 30px 70px rgba(0,0,0,.45),
+            0 0 35px rgba(99,102,241,.14);
+    }
+
+    .stat-card::before {
+        content: "";
+        position: absolute;
+        width: 130px;
+        height: 130px;
+        right: -60px;
+        bottom: -60px;
+        border-radius: 50%;
+        background: rgba(99,102,241,.12);
+        transition: .5s ease;
+    }
+
+    .stat-card:hover::before {
+        transform: scale(1.7);
+    }
+
+    .stat-card::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 70%;
+        height: 2px;
+        background: linear-gradient(
+            90deg,
+            transparent,
+            #818cf8,
+            transparent
+        );
+        animation: shine 4s infinite;
+    }
+
+    .stat-icon {
+        position: relative;
+        z-index: 2;
+        width: 52px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        border-radius: 16px;
+        font-size: 23px;
+        background:
+            linear-gradient(
+                135deg,
+                #6366f1,
+                #8b5cf6
+            );
+        box-shadow: 0 10px 30px rgba(99,102,241,.35);
+    }
+
+    .stat-number {
+        position: relative;
+        z-index: 2;
+        font-size: 2.25rem;
+        font-weight: 950;
+        line-height: 1;
+        color: #fff;
+    }
+
+    .stat-label {
+        position: relative;
+        z-index: 2;
+        margin-top: 9px;
+        color: #94a3b8;
+        font-size: .76rem;
+        font-weight: 800;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+    }
+
+    /* =========================
+       CHART CARDS
+       ========================= */
+
+    .chart-card {
+        position: relative;
+        height: 100%;
+        padding: 25px;
+        border-radius: 26px;
+        background:
+            linear-gradient(
+                145deg,
+                rgba(15,23,42,.92),
+                rgba(15,23,42,.72)
+            );
+        border: 1px solid rgba(255,255,255,.08);
+        box-shadow: 0 20px 60px rgba(0,0,0,.32);
+        backdrop-filter: blur(18px);
+        transition: .35s ease;
+    }
+
+    .chart-card:hover {
+        border-color: rgba(129,140,248,.30);
+        transform: translateY(-3px);
+    }
+
+    .chart-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .chart-title {
+        font-size: 1rem;
+        font-weight: 900;
+        color: #e2e8f0;
+    }
+
+    .chart-badge {
+        padding: 6px 10px;
+        border-radius: 50px;
+        color: #a5b4fc;
+        background: rgba(99,102,241,.10);
+        border: 1px solid rgba(99,102,241,.18);
+        font-size: .68rem;
+        font-weight: 800;
+    }
+
+    .chart-wrapper {
+        position: relative;
+        height: 330px;
+    }
+
+    /* =========================
+       PERFORMANCE PANEL
+       ========================= */
+
+    .performance-box {
+        padding: 20px;
+        margin-bottom: 15px;
+        border-radius: 20px;
+        background: rgba(255,255,255,.035);
+        border: 1px solid rgba(255,255,255,.06);
+        transition: .3s ease;
+    }
+
+    .performance-box:hover {
+        background: rgba(99,102,241,.08);
+        transform: translateX(5px);
+    }
+
+    .performance-icon {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+
+    .performance-title {
+        font-weight: 850;
+        color: #f8fafc;
+    }
+
+    .performance-text {
+        margin-top: 5px;
+        color: #64748b;
+        font-size: .78rem;
+    }
+
+    .custom-progress {
+        height: 9px;
+        overflow: hidden;
+        margin-top: 15px;
+        border-radius: 50px;
+        background: #1e293b;
+    }
+
+    .custom-progress-bar {
+        width: 85%;
+        height: 100%;
+        border-radius: inherit;
+        background:
+            linear-gradient(
+                90deg,
+                #6366f1,
+                #8b5cf6,
+                #ec4899
+            );
+        box-shadow: 0 0 20px rgba(139,92,246,.45);
+        animation: progressLoad 1.8s ease;
+    }
+
+    /* =========================
+       ORDERS
+       ========================= */
+
+    .orders-card {
+        margin-top: 30px;
+        overflow: hidden;
+        border-radius: 28px;
+        background: rgba(15,23,42,.88);
+        border: 1px solid rgba(255,255,255,.08);
+        box-shadow: 0 25px 70px rgba(0,0,0,.34);
+        backdrop-filter: blur(18px);
+    }
+
+    .orders-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 26px 28px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .orders-header h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 900;
+    }
+
+    .live-indicator {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 13px;
+        border-radius: 50px;
+        color: #86efac;
+        background: rgba(34,197,94,.07);
+        border: 1px solid rgba(34,197,94,.17);
+        font-size: .70rem;
+        font-weight: 900;
+        letter-spacing: .8px;
+    }
+
+    .orders-table {
+        margin: 0;
+        color: #e2e8f0;
+        vertical-align: middle;
+    }
+
+    .orders-table thead th {
+        padding: 18px 22px;
+        border: 0;
+        background: rgba(2,6,23,.55);
+        color: #64748b;
+        font-size: .68rem;
+        font-weight: 900;
+        letter-spacing: 1.2px;
+        text-transform: uppercase;
+    }
+
+    .orders-table tbody td {
+        padding: 18px 22px;
+        border-color: rgba(255,255,255,.055);
+        background: transparent;
+    }
+
+    .orders-table tbody tr {
+        transition: .25s ease;
+    }
+
+    .orders-table tbody tr:hover {
+        background: rgba(99,102,241,.075);
+        transform: scale(1.005);
+    }
+
+    .order-id {
+        color: #a5b4fc;
+        font-weight: 900;
+    }
+
+    .customer {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-weight: 700;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: white;
+        font-size: .85rem;
+        font-weight: 950;
+        background:
+            linear-gradient(
+                135deg,
+                #6366f1,
+                #ec4899
+            );
+        box-shadow: 0 7px 22px rgba(99,102,241,.28);
+    }
+
+    .order-total {
+        color: #86efac;
+        font-size: .98rem;
+        font-weight: 950;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 7px 13px;
+        border-radius: 50px;
+        color: #a5b4fc;
+        background: rgba(99,102,241,.11);
+        border: 1px solid rgba(99,102,241,.22);
+        font-size: .68rem;
+        font-weight: 900;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+    }
+
+    .empty-orders {
+        padding: 60px 20px;
+        text-align: center;
+        color: #64748b;
+    }
+
+    .empty-orders-icon {
+        margin-bottom: 12px;
+        font-size: 3rem;
+    }
+
+    /* =========================
+       ANIMATIONS
+       ========================= */
+
+    @keyframes cardIn {
+        from {
+            opacity: 0;
+            transform: translateY(35px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes floatingOrb {
+        0%, 100% {
+            transform: translate(0, 0);
+        }
+
+        50% {
+            transform: translate(-25px, 30px);
+        }
+    }
+
+    @keyframes pulse {
+        0%, 100% {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(.65);
+            opacity: .45;
+        }
+    }
+
+    @keyframes shine {
+        0% {
+            left: -100%;
+        }
+
+        40%, 100% {
+            left: 150%;
+        }
+    }
+
+    @keyframes progressLoad {
+        from {
+            width: 0;
+        }
+
+        to {
+            width: 85%;
+        }
+    }
+
+    /* =========================
+       MOBILE
+       ========================= */
+
+    @media (max-width: 768px) {
+
+        .sportiva-dashboard {
+            padding-top: 20px;
+        }
+
+        .dashboard-header {
+            padding: 27px 22px;
+            border-radius: 23px;
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+        }
+
+        .stat-card {
+            min-height: 155px;
+            padding: 20px;
+        }
+
+        .stat-number {
+            font-size: 1.75rem;
+        }
+
+        .chart-card {
+            padding: 20px;
+        }
+
+        .chart-wrapper {
+            height: 280px;
+        }
+
+        .orders-header {
+            padding: 20px;
+        }
+
+        .orders-table {
+            min-width: 680px;
+        }
+    }
+</style>
+
+
+<div class="sportiva-dashboard">
+
+    <div class="container-fluid px-3 px-md-4">
+
+        <!-- =====================================
+             HEADER
+             ===================================== -->
+
+        <div class="dashboard-header">
+
+            <div class="dashboard-header-content">
+
+                <h1>⚡ SPORTIVA Admin Dashboard</h1>
+
+                <div class="dashboard-subtitle">
+                    Real-time overview of your SPORTIVA store performance
+                </div>
+
+                <div class="dashboard-status">
+                    <span class="live-dot"></span>
+                    SYSTEM ONLINE
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             STATISTICS
+             ===================================== -->
+
+        <div class="row g-3 mb-4">
+
+            {% for k,v in stats.items %}
+
+            <div class="col-6 col-md-3">
+
+                <div
+                    class="stat-card"
+                    style="animation-delay: {{ forloop.counter0 }}00ms;"
+                >
+
+                    <div class="stat-icon">
+
+                        {% if forloop.counter == 1 %}
+                            📊
+                        {% elif forloop.counter == 2 %}
+                            🛒
+                        {% elif forloop.counter == 3 %}
+                            👥
+                        {% elif forloop.counter == 4 %}
+                            💰
+                        {% else %}
+                            ⚡
+                        {% endif %}
+
+                    </div>
+
+                    <div
+                        class="stat-number stat-counter"
+                        data-value="{{ v }}"
+                    >
+                        {{ v }}
+                    </div>
+
+                    <div class="stat-label">
+                        {{ k|title }}
+                    </div>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+
+        <!-- =====================================
+             CHARTS
+             ===================================== -->
+
+        <div class="row g-4">
+
+
+            <!-- SALES GRAPH -->
+
+            <div class="col-lg-8">
+
+                <div class="chart-card">
+
+                    <div class="chart-heading">
+
+                        <div class="chart-title">
+                            📈 Sales Analytics
+                        </div>
+
+                        <div class="chart-badge">
+                            LIVE DATA
+                        </div>
+
+                    </div>
+
+                    <div class="chart-wrapper">
+
+                        <!-- Existing canvas preserved -->
+                        <canvas id="salesChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- BAR GRAPH -->
+
+            <div class="col-lg-4">
+
+                <div class="chart-card">
+
+                    <div class="chart-heading">
+
+                        <div class="chart-title">
+                            📊 Performance Breakdown
+                        </div>
+
+                        <div class="chart-badge">
+                            BAR
+                        </div>
+
+                    </div>
+
+                    <div class="chart-wrapper">
+
+                        <canvas id="barChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PIE GRAPH -->
+
+            <div class="col-lg-5">
+
+                <div class="chart-card">
+
+                    <div class="chart-heading">
+
+                        <div class="chart-title">
+                            🍩 Store Statistics
+                        </div>
+
+                        <div class="chart-badge">
+                            ANALYTICS
+                        </div>
+
+                    </div>
+
+                    <div class="chart-wrapper">
+
+                        <canvas id="pieChart"></canvas>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- PERFORMANCE PANEL -->
+
+            <div class="col-lg-7">
+
+                <div class="chart-card">
+
+                    <div class="chart-heading">
+
+                        <div class="chart-title">
+                            🚀 SPORTIVA Performance
+                        </div>
+
+                        <div class="chart-badge">
+                            ACTIVE
+                        </div>
+
+                    </div>
+
+
+                    <div class="performance-box">
+
+                        <div class="performance-icon">
+                            🟢
+                        </div>
+
+                        <div class="performance-title">
+                            System Online
+                        </div>
+
+                        <div class="performance-text">
+                            All dashboard systems are operational.
+                        </div>
+
+                    </div>
+
+
+                    <div class="performance-box">
+
+                        <div class="performance-icon">
+                            ⚡
+                        </div>
+
+                        <div class="performance-title">
+                            Live Analytics
+                        </div>
+
+                        <div class="performance-text">
+                            Your existing statistics are visualized dynamically.
+                        </div>
+
+                    </div>
+
+
+                    <div class="performance-box">
+
+                        <div class="d-flex justify-content-between">
+
+                            <div>
+
+                                <div class="performance-title">
+                                    Store Performance
+                                </div>
+
+                                <div class="performance-text">
+                                    Overall dashboard activity
+                                </div>
+
+                            </div>
+
+                            <div class="text-success fw-bold">
+                                85%
+                            </div>
+
+                        </div>
+
+                        <div class="custom-progress">
+
+                            <div class="custom-progress-bar"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================
+             RECENT ORDERS
+             ===================================== -->
+
+        <div class="orders-card">
+
+            <div class="orders-header">
+
+                <h3>
+                    🛍️ Recent Orders
+                </h3>
+
+                <div class="live-indicator">
+
+                    <span class="live-dot"></span>
+
+                    LIVE ORDERS
+
+                </div>
+
+            </div>
+
+
+            <div class="table-responsive">
+
+                <table class="table orders-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Order
+                            </th>
+
+                            <th>
+                                Customer
+                            </th>
+
+                            <th>
+                                Total
+                            </th>
+
+                            <th>
+                                Status
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for o in orders %}
+
+                        <tr>
+
+                            <td>
+
+                                <span class="order-id">
+                                    #{{ o.pk }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <div class="customer">
+
+                                    <div class="avatar">
+
+                                        {{ o.user.username|first|upper }}
+
+                                    </div>
+
+                                    <span>
+                                        {{ o.user.username }}
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="order-total">
+                                    ₹{{ o.total }}
+                                </span>
+
+                            </td>
+
+
+                            <td>
+
+                                <span class="status-badge">
+                                    {{ o.status }}
+                                </span>
+
+                            </td>
+
+                        </tr>
+
+                        {% empty %}
+
+                        <tr>
+
+                            <td colspan="4">
+
+                                <div class="empty-orders">
+
+                                    <div class="empty-orders-icon">
+                                        💤
+                                    </div>
+
+                                    <div>
+                                        No recent orders found
+                                    </div>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================================
+     CHART.JS
+     ========================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    /* =========================================
+       EXISTING DJANGO STATS
+       ========================================= */
+
+    const statLabels = [
+
+        {% for k,v in stats.items %}
+
+            "{{ k|title|escapejs }}",
+
+        {% endfor %}
+
+    ];
+
+
+    const statValues = [
+
+        {% for k,v in stats.items %}
+
+            Number(
+                "{{ v|escapejs }}"
+                .replace(/[^0-9.-]/g, "")
+            ) || 0,
+
+        {% endfor %}
+
+    ];
+
+
+    /* =========================================
+       CHART DEFAULTS
+       ========================================= */
+
+    Chart.defaults.color = "#94a3b8";
+
+    Chart.defaults.font.family =
+        "-apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif";
+
+
+    const gridColor =
+        "rgba(148,163,184,.08)";
+
+
+    /* =========================================
+       SALES GRAPH
+       ========================================= */
+
+    const salesCanvas =
+        document.getElementById("salesChart");
+
+    const salesCtx =
+        salesCanvas.getContext("2d");
+
+
+    const salesGradient =
+        salesCtx.createLinearGradient(
+            0,
+            0,
+            0,
+            330
+        );
+
+
+    salesGradient.addColorStop(
+        0,
+        "rgba(99,102,241,.55)"
+    );
+
+    salesGradient.addColorStop(
+        .5,
+        "rgba(139,92,246,.20)"
+    );
+
+    salesGradient.addColorStop(
+        1,
+        "rgba(99,102,241,0)"
+    );
+
+
+    new Chart(
+        salesCtx,
+        {
+
+            type: "line",
+
+            data: {
+
+                labels: statLabels,
+
+                datasets: [
+
+                    {
+
+                        label: "Performance",
+
+                        data: statValues,
+
+                        borderColor:
+                            "#818cf8",
+
+                        backgroundColor:
+                            salesGradient,
+
+                        borderWidth: 4,
+
+                        fill: true,
+
+                        tension: .45,
+
+                        pointRadius: 6,
+
+                        pointHoverRadius: 11,
+
+                        pointBackgroundColor:
+                            "#ffffff",
+
+                        pointBorderColor:
+                            "#818cf8",
+
+                        pointBorderWidth: 4
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                animation: {
+
+                    duration: 2200,
+
+                    easing: "easeOutQuart"
+
+                },
+
+                interaction: {
+
+                    intersect: false,
+
+                    mode: "index"
+
+                },
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    },
+
+                    tooltip: {
+
+                        backgroundColor:
+                            "rgba(15,23,42,.96)",
+
+                        borderColor:
+                            "rgba(129,140,248,.45)",
+
+                        borderWidth: 1,
+
+                        padding: 14,
+
+                        displayColors: false,
+
+                        titleFont: {
+                            weight: "bold"
+                        }
+
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        },
+
+                        ticks: {
+                            color: "#64748b"
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        grid: {
+                            color: gridColor
+                        },
+
+                        ticks: {
+                            color: "#64748b"
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =========================================
+       BAR GRAPH
+       ========================================= */
+
+    const barCanvas =
+        document.getElementById("barChart");
+
+    const barCtx =
+        barCanvas.getContext("2d");
+
+
+    const barGradient =
+        barCtx.createLinearGradient(
+            0,
+            0,
+            0,
+            330
+        );
+
+
+    barGradient.addColorStop(
+        0,
+        "#8b5cf6"
+    );
+
+    barGradient.addColorStop(
+        1,
+        "#6366f1"
+    );
+
+
+    new Chart(
+        barCtx,
+        {
+
+            type: "bar",
+
+            data: {
+
+                labels: statLabels,
+
+                datasets: [
+
+                    {
+
+                        label: "Value",
+
+                        data: statValues,
+
+                        backgroundColor:
+                            barGradient,
+
+                        borderRadius: 12,
+
+                        borderSkipped: false,
+
+                        hoverBackgroundColor:
+                            "#ec4899"
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                animation: {
+
+                    duration: 2000,
+
+                    easing: "easeOutBounce"
+
+                },
+
+                plugins: {
+
+                    legend: {
+
+                        display: false
+
+                    },
+
+                    tooltip: {
+
+                        backgroundColor:
+                            "rgba(15,23,42,.96)",
+
+                        padding: 14
+
+                    }
+
+                },
+
+                scales: {
+
+                    x: {
+
+                        grid: {
+                            display: false
+                        }
+
+                    },
+
+                    y: {
+
+                        beginAtZero: true,
+
+                        grid: {
+                            color: gridColor
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =========================================
+       PIE / DOUGHNUT GRAPH
+       ========================================= */
+
+    const pieCanvas =
+        document.getElementById("pieChart");
+
+    const pieCtx =
+        pieCanvas.getContext("2d");
+
+
+    new Chart(
+        pieCtx,
+        {
+
+            type: "doughnut",
+
+            data: {
+
+                labels: statLabels,
+
+                datasets: [
+
+                    {
+
+                        data: statValues,
+
+                        backgroundColor: [
+
+                            "#6366f1",
+
+                            "#8b5cf6",
+
+                            "#ec4899",
+
+                            "#06b6d4",
+
+                            "#22c55e",
+
+                            "#f59e0b",
+
+                            "#ef4444",
+
+                            "#14b8a6"
+
+                        ],
+
+                        borderColor:
+                            "#0f172a",
+
+                        borderWidth: 4,
+
+                        hoverOffset: 18
+
+                    }
+
+                ]
+
+            },
+
+            options: {
+
+                responsive: true,
+
+                maintainAspectRatio: false,
+
+                cutout: "62%",
+
+                animation: {
+
+                    animateRotate: true,
+
+                    animateScale: true,
+
+                    duration: 2200,
+
+                    easing: "easeOutBack"
+
+                },
+
+                plugins: {
+
+                    legend: {
+
+                        position: "bottom",
+
+                        labels: {
+
+                            padding: 16,
+
+                            usePointStyle: true,
+
+                            pointStyle: "circle"
+
+                        }
+
+                    },
+
+                    tooltip: {
+
+                        backgroundColor:
+                            "rgba(15,23,42,.96)",
+
+                        padding: 14
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+    /* =========================================
+       ANIMATED STAT COUNTERS
+       ========================================= */
+
+    document
+        .querySelectorAll(".stat-counter")
+        .forEach(function (counter) {
+
+            const target =
+                Number(counter.dataset.value) || 0;
+
+            if (target > 1000000) {
+                return;
+            }
+
+            const duration = 1400;
+
+            const startTime =
+                performance.now();
+
+
+            function animateCounter(currentTime) {
+
+                const progress =
+                    Math.min(
+                        (currentTime - startTime) /
+                        duration,
+                        1
+                    );
+
+
+                const eased =
+                    1 -
+                    Math.pow(
+                        1 - progress,
+                        4
+                    );
+
+
+                const current =
+                    Math.floor(
+                        target * eased
+                    );
+
+
+                counter.textContent =
+                    current.toLocaleString();
+
+
+                if (progress < 1) {
+
+                    requestAnimationFrame(
+                        animateCounter
+                    );
+
+                } else {
+
+                    counter.textContent =
+                        target.toLocaleString();
+
+                }
+
+            }
+
+
+            requestAnimationFrame(
+                animateCounter
+            );
+
+        });
+
+});
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,1 @@
+document.addEventListener('DOMContentLoaded',()=>{const c=document.getElementById('salesChart');if(c)new Chart(c,{type:'line',data:{labels:['Jan','Feb','Mar','Apr','May','Jun'],datasets:[{label:'Sales',data:[12000,19000,16000,26000,31000,39000],tension:.35}]},options:{responsive:true,plugins:{legend:{display:true}}}})});
