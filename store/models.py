@@ -15,9 +15,16 @@ class Category(models.Model):
  def __str__(self): return self.name
 
 class Product(models.Model):
- category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='products'); name=models.CharField(max_length=160); slug=models.SlugField(unique=True); description=models.TextField(); price=models.DecimalField(max_digits=10,decimal_places=2); old_price=models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True); image=models.ImageField(upload_to='products/',blank=True); image_url=models.URLField(blank=True); featured=models.BooleanField(default=False); created_at=models.DateTimeField(auto_now_add=True)
- def get_image(self): return self.image.url if self.image else self.image_url
+ category=models.ForeignKey(Category,on_delete=models.CASCADE,related_name='products'); name=models.CharField(max_length=160); code=models.CharField(max_length=50,blank=True,default=''); slug=models.SlugField(unique=True); description=models.TextField(); price=models.DecimalField(max_digits=10,decimal_places=2); old_price=models.DecimalField(max_digits=10,decimal_places=2,null=True,blank=True); image=models.ImageField(upload_to='products/',blank=True); image_url=models.CharField(max_length=500,blank=True,default=''); featured=models.BooleanField(default=False); created_at=models.DateTimeField(auto_now_add=True)
+ def get_image(self):
+  if self.image: return self.image.url
+  if self.image_url: return self.image_url
+  return '/static/store/images/products/running_shoes.jpg'
  def get_absolute_url(self): return reverse('product',args=[self.slug])
+ @property
+ def celebrity(self):
+  from .fitness_celebrities import get_celebrity_for_product
+  return get_celebrity_for_product(self.name)
  @property
  def rating(self):
   vals=list(self.reviews.values_list('rating',flat=True)); return round(sum(vals)/len(vals),1) if vals else 0

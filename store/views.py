@@ -4,11 +4,12 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.db.models import Q,Sum,Count
 from .models import *
+from .fitness_celebrities import FITNESS_CELEBRITIES
 
 def ctx(request):
  c=Cart.objects.filter(user=request.user).first() if request.user.is_authenticated else None
  return {'cart_count':sum(i.quantity for i in c.items.all()) if c else 0}
-def home(request): return render(request,'store/home.html',{'categories':Category.objects.all(),'featured':Product.objects.filter(featured=True)[:8],'products':Product.objects.order_by('-created_at')[:8],**ctx(request)})
+def home(request): return render(request,'store/home.html',{'categories':Category.objects.prefetch_related('products').all(),'featured':Product.objects.filter(featured=True)[:12],'products':Product.objects.order_by('-created_at')[:12],'celebrities':FITNESS_CELEBRITIES,**ctx(request)})
 def products(request):
  qs=Product.objects.select_related('category').all(); q=request.GET.get('q',''); cat=request.GET.get('category'); sort=request.GET.get('sort','-created_at')
  if q: qs=qs.filter(Q(name__icontains=q)|Q(description__icontains=q))
